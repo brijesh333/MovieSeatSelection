@@ -1,0 +1,390 @@
+<h1 style="margin-left: 474px;">Movie Seat Reservation</h1>
+
+<script>
+    function startSelection(){
+        if(document.getElementById("name").value==""){
+            document.getElementById("errorName").style.display="inline";
+        }
+        if(document.getElementById("seats").value==""){
+            document.getElementById("errorSeats").style.display="inline";
+        }
+        if(document.getElementById("seats").value>120){
+            document.getElementById("errorSeats").innerHTML="You can not select more than 120 seats";
+            document.getElementById("errorSeats").style.display="inline";
+        }
+        for(var i=0;i<120;i++){
+            if(document.getElementsByClassName("btnSelection")[i].style.backgroundColor!="green"){
+                document.getElementsByClassName("btnSelection")[i].removeAttribute('disabled');
+            }
+        }
+    }
+    function hideNameError(){
+        document.getElementById("errorName").style.display="none";
+    }
+    function hideSeatsError(){
+        document.getElementById("errorSeats").style.display="none";
+    }
+
+    var count=0;
+    function chnageColor(id){
+        if(document.getElementById(id).style.backgroundColor=="red") {
+            count--;
+            document.getElementById(id).style.backgroundColor = "";
+        }
+        else {
+            count++;
+            if(count<=document.getElementById("seats").value){
+                document.getElementById(id).style.backgroundColor = "red";
+            }
+            else{
+                var msg="You can not select more then " +document.getElementById("seats").value+" seats";
+                alert(msg);
+                count--;
+            }
+        }
+        if(document.getElementById("seats").value-count==0){
+            document.getElementById("confirmSelection").removeAttribute('disabled');
+        }
+        else{
+            document.getElementById("confirmSelection").setAttribute("disabled", true);
+        }
+    }
+
+    function finalSeat(){
+        var noofseats=0;
+        var seats=[];
+        noofseats=document.getElementsByClassName("btnSelection").length;
+        for(var i=0;i<noofseats;i++){
+            if(document.getElementsByClassName("btnSelection")[i].style.backgroundColor=="red"){
+                seats.push(document.getElementsByClassName("btnSelection")[i].id.toUpperCase());
+                document.getElementsByClassName("btnSelection")[i].style.backgroundColor="green";
+                document.getElementsByClassName("btnSelection")[i].setAttribute("disabled", true);
+            }
+        }
+        insertrow(seats);
+        disableClear();
+    }
+    function disableClear(){
+        document.getElementById("name").value='';
+        document.getElementById("seats").value='';
+        for(var i=0;i<120;i++){
+            document.getElementsByClassName("btnSelection")[i].setAttribute("disabled", true);
+        }
+        document.getElementById("confirmSelection").setAttribute('disabled',true);
+    }
+    function updateTableData(seats){
+        insertrow(seats);
+    }
+    function insertrow(seats) {
+        var row = document.createElement('tr');
+        row.style.textAlign="-webkit-center";
+        row.style.height="30px";
+        var col1 = document.createElement('td');
+        var col2 = document.createElement('td');
+        var col3 = document.createElement('td');
+        row.appendChild(col1);
+        row.appendChild(col2);
+        row.appendChild(col3);
+        col1.innerHTML = document.getElementById("name").value;
+        col1.style.border="1px solid #059bb2";
+        col2.innerHTML = document.getElementById("seats").value;
+        col2.style.border="1px solid #059bb2";
+        var seat_number="";
+        for(var i=0;i<seats.length;i++){
+            seat_number+=seats[i]+", ";
+        }
+        var seats_number=seat_number.substr(0,seat_number.length-2);
+        col3.innerHTML = seats_number;
+        col3.style.border="1px solid #059bb2";
+        var table = document.getElementById("mytable");
+        table.appendChild(row);
+        count=0;
+    }
+
+</script>
+
+<div ng-app="">
+    <div>
+        <label style="margin-left: 374px;">Name : </label>
+        <input type="text" id="name" style="margin-left: 10px;border-left: aliceblue;border-right: aliceblue;border-top: aliceblue;border-bottom-color: #059bb2;" onclick="hideNameError()"/>
+        <label style="margin-left: 53px;">No. of seats :</label>
+        <input type="number" id="seats" style="margin-left: 10px;border-left: aliceblue;border-right: aliceblue;border-top: aliceblue;border-bottom-color: #059bb2;" onclick="hideSeatsError()"/>
+
+    </div>
+
+    <div style="margin-top: 10px;margin-left: 445px;    color: red;">
+        <label class="error" id="errorName" style="display: none">This field is required</label>
+        <label class="error" id="errorSeats" style="margin-left: 176px;display: none">This field is required</label>
+    </div>
+    <div>
+        <button type="button" onclick="startSelection()" style="margin-left: 610px;margin-top: 32px;border-color: #059bb2;background-color: white;width: 138px;height: 30px;" id="startSelection">Start Selection</button>
+    </div>
+    <div style="margin-top: 21px;">
+        <label style="width: 200px;background-color: #059bb2;color: white;padding-left: 245px;margin-left: 394px;padding-right: 245px;padding-top: 6px;padding-bottom: 6px;">SCREEN</label>
+    </div>
+    <div>
+
+    </div>
+    <div style="padding-left: 438px;padding-top: 17px;">
+        <label style="margin-left: 15px;">1</label>
+        <label style="margin-left: 27px;">2</label>
+        <label style="margin-left: 28px;">3</label>
+        <label style="margin-left: 28px;">4</label>
+        <label style="margin-left: 28px;">5</label>
+        <label style="margin-left: 48px;">6</label>
+        <label style="margin-left: 28px;">7</label>
+        <label style="margin-left: 28px;">8</label>
+        <label style="margin-left: 28px;">9</label>
+        <label style="margin-left: 25px;">10</label>
+        <label style="margin-left: 20px;">11</label>
+        <label style="margin-left: 20px;">12</label>
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>A</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="a1" style="height: 16px;margin-left: 20px;" disabled onclick="chnageColor('a1')"></button>
+            <button class="btnSelection"id="a2" style="height: 16px;margin-left: 20px;" disabled onclick="chnageColor('a2')"></button>
+            <button class="btnSelection"id="a3" style="height: 16px;margin-left: 20px;" disabled onclick="chnageColor('a3')"></button>
+            <button class="btnSelection"id="a4" style="height: 16px;margin-left: 20px;" disabled onclick="chnageColor('a4')"></button>
+            <button class="btnSelection"id="a5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('a5')"></button>
+            <button class="btnSelection"id="a6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('a6')"></button>
+            <button class="btnSelection"id="a7" style="height: 16px;margin-left: 20px;" disabled  onclick="chnageColor('a7')"></button>
+            <button class="btnSelection"id="a8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('a8')"></button>
+            <button class="btnSelection" id="a9" style="height: 16px;margin-left: 20px;" disabled  onclick="chnageColor('a9')"></button>
+            <button class="btnSelection" id="a10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('a10')"></button>
+            <button class="btnSelection" id="a11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('a11')"></button>
+            <button class="btnSelection" id="a12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('a12')"></button>
+        </div>
+
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>B</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="b1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b1')"></button>
+            <button class="btnSelection" id="b2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b2')"></button>
+            <button class="btnSelection" id="b3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b3')"></button>
+            <button class="btnSelection" id="b4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b4')"></button>
+            <button class="btnSelection" id="b5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b5')"></button>
+            <button class="btnSelection" id="b6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('b6')"></button>
+            <button class="btnSelection" id="b7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b7')"></button>
+            <button class="btnSelection" id="b8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b8')"></button>
+            <button class="btnSelection" id="b9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b9')"></button>
+            <button class="btnSelection" id="b10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b10')"></button>
+            <button class="btnSelection" id="b11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b11')"></button>
+            <button class="btnSelection" id="b12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('b12')"></button>
+        </div>
+
+
+    </div>
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>C</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="c1" style="height: 16px;margin-left: 20px;"  disabled  onclick="chnageColor('c1')"></button>
+            <button class="btnSelection" id="c2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c2')"></button>
+            <button class="btnSelection" id="c3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c3')"></button>
+            <button class="btnSelection" id="c4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c4')"></button>
+            <button class="btnSelection" id="c5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c5')"></button>
+            <button class="btnSelection" id="c6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('c6')"></button>
+            <button class="btnSelection" id="c7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c7')"></button>
+            <button class="btnSelection" id="c8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c8')"></button>
+            <button class="btnSelection" id="c9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c9')"></button>
+            <button class="btnSelection" id="c10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c10')"></button>
+            <button class="btnSelection" id="c11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c11')"></button>
+            <button class="btnSelection" id="c12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('c12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>D</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="d1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d1')"></button>
+            <button class="btnSelection" id="d2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d2')"></button>
+            <button class="btnSelection" id="d3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d3')"></button>
+            <button class="btnSelection" id="d4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d4')"></button>
+            <button class="btnSelection" id="d5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d5')"></button>
+            <button class="btnSelection" id="d6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('d6')"></button>
+            <button class="btnSelection" id="d7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d7')"></button>
+            <button class="btnSelection" id="d8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d8')"></button>
+            <button class="btnSelection" id="d9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d9')"></button>
+            <button class="btnSelection" id="d10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d10')"></button>
+            <button class="btnSelection" id="d11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d11')"></button>
+            <button class="btnSelection" id="d12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('d12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>E</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="e1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e1')"></button>
+            <button class="btnSelection" id="e2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e2')"></button>
+            <button class="btnSelection" id="e3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e3')"></button>
+            <button class="btnSelection" id="e4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e4')"></button>
+            <button class="btnSelection" id="e5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e5')"></button>
+            <button class="btnSelection" id="e6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('e6')"></button>
+            <button class="btnSelection" id="e7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e7')"></button>
+            <button class="btnSelection" id="e8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e8')"></button>
+            <button class="btnSelection" id="e9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e9')"></button>
+            <button class="btnSelection" id="e10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e10')"></button>
+            <button class="btnSelection" id="e11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e11')"></button>
+            <button class="btnSelection" id="e12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('e12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 40px;">
+        <div>
+            <label>F</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="f1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f1')"></button>
+            <button class="btnSelection" id="f2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f2')"></button>
+            <button class="btnSelection" id="f3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f3')"></button>
+            <button class="btnSelection" id="f4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f4')"></button>
+            <button class="btnSelection" id="f5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f5')"></button>
+            <button class="btnSelection" id="f6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('f6')"></button>
+            <button class="btnSelection" id="f7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f7')"></button>
+            <button class="btnSelection" id="f8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f8')"></button>
+            <button class="btnSelection" id="f9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f9')"></button>
+            <button class="btnSelection" id="f10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f10')"></button>
+            <button class="btnSelection" id="f11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f11')"></button>
+            <button class="btnSelection" id="f12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('f12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>G</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="g1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g1')"></button>
+            <button class="btnSelection" id="g2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g2')"></button>
+            <button class="btnSelection" id="g3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g3')"></button>
+            <button class="btnSelection" id="g4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g4')"></button>
+            <button class="btnSelection" id="g5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g5')"></button>
+            <button class="btnSelection" id="g6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('g6')"></button>
+            <button class="btnSelection" id="g7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g7')"></button>
+            <button class="btnSelection" id="g8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g8')"></button>
+            <button class="btnSelection" id="g9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g9')"></button>
+            <button class="btnSelection" id="g10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g10')"></button>
+            <button class="btnSelection" id="g11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g11')"></button>
+            <button class="btnSelection" id="g12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('g12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>H</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="h1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h1')"></button>
+            <button class="btnSelection" id="h2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h2')"></button>
+            <button class="btnSelection" id="h3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h3')"></button>
+            <button class="btnSelection" id="h4" style="height: 16px;margin-left: 20px;" disabled  onclick="chnageColor('h4')"></button>
+            <button class="btnSelection" id="h5" style="height: 16px;margin-left: 20px;" disabled  onclick="chnageColor('h5')"></button>
+            <button class="btnSelection" id="h6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('h6')"></button>
+            <button class="btnSelection" id="h7" style="height: 16px;margin-left: 20px;" disabled  onclick="chnageColor('h7')"></button>
+            <button class="btnSelection" id="h8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h8')"></button>
+            <button class="btnSelection" id="h9" style="height: 16px;margin-left: 20px;" disabled  onclick="chnageColor('h9')"></button>
+            <button class="btnSelection" id="h10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h10')"></button>
+            <button class="btnSelection" id="h11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h11')"></button>
+            <button class="btnSelection" id="h12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('h12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>I</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="i1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i1')"></button>
+            <button class="btnSelection" id="i2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i2')"></button>
+            <button class="btnSelection" id="i3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i3')"></button>
+            <button class="btnSelection" id="i4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i4')"></button>
+            <button class="btnSelection" id="i5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i5')"></button>
+            <button class="btnSelection" id="i6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('i6')"></button>
+            <button class="btnSelection" id="i7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i7')"></button>
+            <button class="btnSelection" id="i8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i8')"></button>
+            <button class="btnSelection" id="i9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i9')"></button>
+            <button class="btnSelection" id="i10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i10')"></button>
+            <button class="btnSelection" id="i11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i11')"></button>
+            <button class="btnSelection" id="i12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('i12')"></button>
+        </div>
+
+    </div>
+
+    <div style="padding-left: 413px;padding-top: 17px;">
+        <div>
+            <label>J</label>
+        </div>
+        <div style="margin-top: -17px;margin-left: 18px;">
+            <button class="btnSelection" id="j1" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j1')"></button>
+            <button class="btnSelection" id="j2" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j2')"></button>
+            <button class="btnSelection" id="j3" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j3')"></button>
+            <button class="btnSelection" id="j4" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j4')"></button>
+            <button class="btnSelection" id="j5" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j5')"></button>
+            <button class="btnSelection" id="j6" style="height: 16px;margin-left: 41px;"  disabled onclick="chnageColor('j6')"></button>
+            <button class="btnSelection" id="j7" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j7')"></button>
+            <button class="btnSelection" id="j8" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j8')"></button>
+            <button class="btnSelection" id="j9" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j9')"></button>
+            <button class="btnSelection" id="j10" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j10')"></button>
+            <button class="btnSelection" id="j11" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j11')"></button>
+            <button class="btnSelection" id="j12" style="height: 16px;margin-left: 20px;"  disabled onclick="chnageColor('j12')"></button>
+        </div>
+
+    </div>
+
+    <div>
+        <button type="button" style="margin-left: 610px;margin-top: 32px;border-color: #059bb2;background-color: white;width: 138px;height: 30px;" disabled id="confirmSelection" onclick="finalSeat()">Confirm Selection</button>
+    </div>
+
+    <div style="margin-left: 420px;margin-top: 18px;">
+        <table style="border:1px solid #059bb2;border-collapse:collapse;width: 510px;    text-align: -webkit-center;" id="mytable">
+            <thead style="height: 30px;">
+                <th style="border:1px solid #059bb2;height: 30px;">
+                    Name
+                </th>
+                <th style="border:1px solid #059bb2;height: 30px;">
+                    No.of Seats
+                </th>
+                <th style="border:1px solid #059bb2;height: 30px;">
+                    Seats
+                </th>
+            </thead>
+            <tbody id="tableBody">
+            <!--<tr>-->
+                <!--<td>-->
+                    <!--{{name}}-->
+                <!--</td>-->
+                <!--<td>-->
+
+                <!--</td>-->
+                <!--<td>-->
+
+                <!--</td>-->
+            <!--</tr>-->
+            </tbody>
+
+        </table>
+    </div>
+
+
+</div>
+

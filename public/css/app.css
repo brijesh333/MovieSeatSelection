@@ -1,0 +1,37 @@
+body {
+  padding-top: 70px;
+}
+#container {
+  padding: 39px 0px;
+}
+.single-movie-img {
+  width: 100%; 
+}
+.thumb-big
+{
+  height: 199px;
+}
+.movies-list
+{
+  text-align: center;
+}
+.availability
+{
+  padding: 9px;
+  font-size: 12px;
+  font-weight: 500;
+  color: black;
+}
+.bookThumb
+{
+  height: 149px;
+  padding-right: 21px;
+}
+.seat-label{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.divStyle{
+    padding-left: 423px;
+    padding-top: 17px;
+}
